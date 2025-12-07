@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>KeyVault</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #f3f4f6;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 350px;
+      height: 500px;
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: var(--card-bg);
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav button {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      background: none;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    nav button.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    button.btn-primary {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button.btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .password-item {
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .password-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .password-detail {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 0.25rem;
+      cursor: pointer;
+    }
+
+    .btn-sm:hover {
+      background-color: var(--bg);
+    }
+
+    .btn-danger {
+      color: var(--danger);
+      border-color: #fecaca;
+    }
+
+    .btn-danger:hover {
+      background-color: #fef2f2;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 2rem;
+    }
+
+    #loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🛡️ KeyVault</h1>
+  </header>
+
+  <nav>
+    <button id="nav-list" class="active">Kayıtlı Şifreler</button>
+    <button id="nav-add">Yeni Ekle</button>
+  </nav>
+
+  <main>
+    <!-- LIST VIEW -->
+    <div id="view-list" class="view active">
+      <div class="form-group">
+        <input type="text" id="search-input" placeholder="Web sitesi veya kullanıcı adı ara...">
+      </div>
+      <div id="password-list">
+        <!-- Javascript will populate this -->
+        <div id="loading">Yükleniyor...</div>
+      </div>
+    </div>
+
+    <!-- ADD VIEW -->
+    <div id="view-add" class="view">
+      <form id="add-form">
+        <div class="form-group">
+          <label for="website">Web Sitesi (URL)</label>
+          <input type="text" id="website" placeholder="google.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Kullanıcı Adı / E-posta</label>
+          <input type="text" id="username" placeholder="ornek@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Şifre</label>
+          <input type="password" id="password" required>
+        </div>
+
+        <button type="submit" class="btn-primary">Kaydet</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "KeyVault - Güvenli Şifre Yöneticisi",
+  "version": "3.1",
+  "description": "Şifrelerinizi güvenle saklayın ve yönetin.",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
